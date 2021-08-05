@@ -1,0 +1,20 @@
+# Default values for helm-chart.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+applicationName: {{ application }}
+environment: pr
+replicaCount: 1
+namespace: {{ namespace }}
+
+#TELUS Labels/Annotations
+telus:
+  cmdbId: "{{ cmdbId }}"
+  costCentre: "{{ costCentre }}"
+  organization: "{{ organization }}"
+  mailingList: "{{ mailingList }}"
+
+image:
+  repository: gcr.io/cio-gke-devops-e4993356/{{ namespace }}{{ application }}
+
+ingress:
+  enabled: false

@@ -1,0 +1,35 @@
+management:
+  endpoint:
+    health:
+      status:
+        http-mapping:
+          UP: 200
+          DOWN: 500
+          OUT_OF_SERVICE: 503
+          UNKNOWN: 200
+      show-details: always
+  endpoints:
+    web:
+      exposure:
+        include: "*"
+      base-path: /actuator
+  server:
+    port: 8090
+  health:
+    circuitbreakers:
+      enabled: true
+logging:
+  pattern:
+    level: "%X{transactionId} %5p"
+  level:
+    root: INFO
+spring:
+  jackson:
+    default-property-inclusion: non_null
+    serialization:
+      write_dates_as_timestamps: false
+info:
+  swagger: ${server.servlet.context-path}/swagger-ui.html
+---
+spring:
+  profiles: local

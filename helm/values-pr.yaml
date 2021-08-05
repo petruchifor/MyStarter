@@ -1,0 +1,62 @@
+# Default values for direct-sms.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 2
+namespace: notify-communication
+applicationName: sample-starter
+environment: dv
+telus:
+  cmdbId: "8471"
+  costCentre: "25975"
+  organization: "CIO"
+  mailingList: "chi.ding@telus.com"
+app:
+  image:
+    repository: gcr.io/cio-gke-devops-e4993356/notify-communication/sample-starter
+    pullPolicy: Always
+  serviceAccountName: pubsub-subscriber
+  labels:
+    egress: "true"
+  containerPort: 8080
+  managementPort: 8090
+  extraEnvs:
+    - name: SPRING_PROFILES_ACTIVE
+      value: pr
+    - name: JAVA_OPTS
+      value: -Djava.security.egd=file:/dev/./urandom -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+    - name: GOOGLE_CLOUD_PROJECT
+      value: cio-notification-pr-64911f
+  livenessProbe:
+    httpGet:
+      path: /actuator/health
+      port: 8090
+    periodSeconds: 30
+    initialDelaySeconds: 10
+  readinessProbe:
+    httpGet:
+      path: /actuator/health
+      port: 8090
+    periodSeconds: 60
+    initialDelaySeconds: 10
+  resources:
+    limits:
+      memory: 521Mi
+    requests:
+      cpu: 250m
+      memory: 521Mi
+  autoscaling:
+    enable: true
+    minReplicas: 2
+    maxReplicas: 4
+    targetCPUUtilizationPercentage: 60
+
+prometheus:
+  enable: true
+  scrapePath: /actuator/prometheus
+  scrapePort: 8090
+
+service:
+  type: ClusterIP
+  port: 80
+  managementPort: 8090

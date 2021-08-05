@@ -1,0 +1,36 @@
+steps:
+  ###
+  # This 'update configuration' is used by ECP team to push configurations in /etc/application.yaml into git
+  # and serve the config content via Spring Cloud Config (https://cloud.spring.io/spring-cloud-config/reference/html/)
+  # See the gitbuilder here: https://github.com/telus/cio-notification-devops/tree/master/cloudbuilders/gitbuilder
+  # See the git repo it publishes to here:  https://github.com/telus/cio-notification-config
+  # This all depends on a Spring Config Server deployed into an accessible GKE namespace whose server is here https://github.com/telus/cio-notification-devops/tree/master/springboot-config-server
+  # 
+  # This is some advanced usage that this starter for NGC is not yet ready for
+  ###
+  # update configuration
+  #- name: gcr.io/cio-gke-devops-e4993356/notify-communication/ecp-git-builder:latest
+  #  env:
+  #    - 'ENVIRONMENT=pr'
+  #    - 'APPLICATION=${_SERVICE_NAME}'
+
+  # Copy Helm chart to Cloud Storage
+  - name: 'gcr.io/cloud-builders/gsutil'
+    id: 'publish-helm-chart'
+    args: [ 'cp','-Z','helm/*', 'gs://${_REPO_ID}-kubernetes-manifests/${_NAMESPACE}/']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'pull-image'
+    args: ['pull', 'gcr.io/${_REPO_ID}/${_NAMESPACE}/${_SERVICE_NAME}:$SHORT_SHA']
+
+  - name: 'gcr.io/cloud-builders/docker'
+    id: 'tag-image'
+    args: ['tag', 'gcr.io/${_REPO_ID}/${_NAMESPACE}/${_SERVICE_NAME}:$SHORT_SHA','gcr.io/${_REPO_ID}/${_NAMESPACE}/${_SERVICE_NAME}:$TAG_NAME']
+
+images:
+  - 'gcr.io/${_REPO_ID}/${_NAMESPACE}/${_SERVICE_NAME}:$TAG_NAME'
+
+substitutions:
+  _SERVICE_NAME: sample-starter
+  _REPO_ID: cio-gke-devops-e4993356
+  _NAMESPACE: chnlsales-api

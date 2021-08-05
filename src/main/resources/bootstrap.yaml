@@ -1,0 +1,30 @@
+# This configuration file is used by the Spring Config Server
+# See documentation in cloudbuild.yaml on details of Spring Config Server
+# At this moment this is not being used
+spring:
+  profiles: local
+  cloud:
+    config:
+      enabled: false
+---
+spring:
+  profiles: dv
+  cloud:
+    config:
+      uri: http://spring-config-server-svc
+      name: common,sample-starter
+      request-connect-timeout: 30000
+      request-read-timeout: 30000
+logging:
+  config: http://spring-config-server-svc/common/dv/master/dv/common/logback-spring.xml
+---
+spring:
+  profiles: pr
+  cloud:
+    config:
+      uri: http://spring-config-server-svc
+      name: common,sample-starter
+      request-connect-timeout: 30000
+      request-read-timeout: 30000
+logging:
+  config: http://spring-config-server-svc/common/pr/master/pr/common/logback-spring.xml

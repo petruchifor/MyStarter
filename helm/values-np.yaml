@@ -1,0 +1,58 @@
+# Default values for direct-sms.
+# This is a YAML-formatted file.
+# Declare variables to be passed into your templates.
+
+replicaCount: 1
+namespace: chnlsales-api
+applicationName: sample-starter
+environment: dv
+telus:
+  cmdbId: "11271"
+  costCentre: "25975"
+  organization: "CIO"
+  mailingList: "ngc.dev@telus.com"
+image:
+  repository: gcr.io/cio-gke-devops-e4993356/chnlsales-api/sample-starter
+  pullPolicy: Always
+containerPort: 8080
+managementPort: 8090
+extraEnvs:
+  - name: SPRING_PROFILES_ACTIVE
+    value: dv
+  - name: JAVA_OPTS
+    value: -Djava.security.egd=file:/dev/./urandom -Dfile.encoding=UTF-8 -Dsun.jnu.encoding=UTF-8
+  - name: GOOGLE_CLOUD_PROJECT
+    value: cio-channel-sales-np-97af3d
+livenessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8090
+  periodSeconds: 30
+  initialDelaySeconds: 10
+readinessProbe:
+  httpGet:
+    path: /actuator/health
+    port: 8090
+  periodSeconds: 60
+  initialDelaySeconds: 10
+resources:
+  limits:
+    memory: 521Mi
+  requests:
+    cpu: 250m
+    memory: 521Mi
+autoscaling:
+  enabled: true
+  minReplicas: 1
+  maxReplicas: 2
+  targetCPUUtilizationPercentage: 60
+
+prometheus:
+  enable: true
+  scrapePath: /actuator/prometheus
+  scrapePort: 8090
+
+service:
+  type: ClusterIP
+  port: 80
+  managementPort: 8090

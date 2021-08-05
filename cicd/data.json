@@ -1,0 +1,11 @@
+{
+  "chart": "cio-gke-deployment-chart.0.5.0",
+  "application": "sample-starter",
+  "namespace": "chnlsales-api",
+  "cluster": "private-yul-np-001",
+  "cmdbId": "11271",
+  "costCentre": "25975",
+  "organization": "cio",
+  "mailingList": "donotreply@telus.com",
+  "spinnakerServiceAccount": "tf-infra-channel-sales-admin-sa"
+}

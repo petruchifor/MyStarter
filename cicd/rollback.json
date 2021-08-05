@@ -1,0 +1,22 @@
+{
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "",
+  "limitConcurrent": true,
+  "spelEvaluator": "v4",
+  "stages": [
+    {
+      "account": "{{namespace}}-{{cluster}}",
+      "cloudProvider": "kubernetes",
+      "location": "{{namespace}}",
+      "manifestName": "deployment {{application}}",
+      "mode": "static",
+      "name": "Rollback Deployment",
+      "numRevisionsBack": 1,
+      "refId": "1",
+      "requisiteStageRefIds": [],
+      "type": "undoRolloutManifest"
+    }
+  ],
+  "triggers": [],
+  "updateTs": "1615916792013"
+}

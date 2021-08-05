@@ -1,0 +1,150 @@
+{
+  "appConfig": {},
+  "expectedArtifacts": [
+    {
+      "defaultArtifact": {
+        "artifactAccount": "docker-registry",
+        "id": "959810e3-d078-4dee-b667-1b37b90b5fe0",
+        "name": "gcr.io/cio-gke-devops-e4993356/chnlsales-api/sample-starter",
+        "reference": "gcr.io/cio-gke-devops-e4993356/chnlsales-api/sample-starter",
+        "type": "docker/image",
+        "version": ""
+      },
+      "displayName": "sample-starter-image",
+      "id": "3253ede7-3492-493e-a8e4-1e6e27bddc42",
+      "matchArtifact": {
+        "artifactAccount": "docker-registry",
+        "id": "23037152-f867-48c7-9d02-b41f7bb7392f",
+        "name": "gcr.io/cio-gke-devops-e4993356/chnlsales-api/sample-starter",
+        "type": "docker/image"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "gcs-cio-gke-devops-e4993356",
+        "id": "b586e2c4-58c1-4d9c-bb32-e59e29bf0185",
+        "name": "gs://cio-gke-devops-e4993356-kubernetes-manifests/notify-base/ecp-springboot-deployment-chart.v3.0.4.tgz",
+        "reference": "gs://cio-gke-devops-e4993356-kubernetes-manifests/notify-base/ecp-springboot-deployment-chart.v3.0.4.tgz",
+        "type": "gcs/object"
+      },
+      "displayName": "ecp-base-chart",
+      "id": "9038c11e-1117-42b7-9cc8-721254d24e81",
+      "matchArtifact": {
+        "artifactAccount": "gcs-cio-gke-devops-e4993356",
+        "id": "2c2115b5-bbdc-4c24-9724-b861b780b7a8",
+        "name": "gs://cio-gke-devops-e4993356-kubernetes-manifests/notify-base/ecp-springboot-deployment-chart.v3.0.4.tgz",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    },
+    {
+      "defaultArtifact": {
+        "artifactAccount": "gcs-cio-gke-devops-e4993356",
+        "id": "6baf01a1-aadb-4bf4-b6c7-6e3b5955ac80",
+        "name": "gs://cio-gke-devops-e4993356-kubernetes-manifests/chnlsales-api/sample-starter-values-dv.yaml",
+        "reference": "gs://cio-gke-devops-e4993356-kubernetes-manifests/chnlsales-api/sample-starter-values-dv.yaml",
+        "type": "gcs/object"
+      },
+      "displayName": "adobe-campaign-svc-value",
+      "id": "4d87cc94-99ea-4f6b-8e74-4e86e7d060d9",
+      "matchArtifact": {
+        "artifactAccount": "gcs-cio-gke-devops-e4993356",
+        "id": "37541b7d-1cc1-4fed-a6c6-cc37a7ed00d9",
+        "name": "gs://cio-gke-devops-e4993356-kubernetes-manifests/chnlsales-api/sample-starter-values-dv.yaml",
+        "type": "gcs/object"
+      },
+      "useDefaultArtifact": true,
+      "usePriorArtifact": false
+    }
+  ],
+  "keepWaitingPipelines": false,
+  "lastModifiedBy": "chi-ding",
+  "limitConcurrent": true,
+  "stages": [
+    {
+      "comments": "",
+      "expectedArtifacts": [
+        {
+          "defaultArtifact": {
+            "customKind": true,
+            "id": "3a04a7da-7f91-4ee5-bbc0-115d096d76ca"
+          },
+          "displayName": "sample-starter-manifest",
+          "id": "5b5b8d08-962b-4f63-9936-5da830a8dc16",
+          "matchArtifact": {
+            "id": "c6c13344-29c8-4327-b371-3217bf4efe4b",
+            "name": "sample-starter-manifest",
+            "type": "embedded/base64"
+          },
+          "useDefaultArtifact": false,
+          "usePriorArtifact": false
+        }
+      ],
+      "inputArtifacts": [
+        {
+          "account": "gcs-cio-gke-devops-e4993356",
+          "id": "9038c11e-1117-42b7-9cc8-721254d24e81"
+        },
+        {
+          "account": "gcs-cio-gke-devops-e4993356",
+          "id": "4d87cc94-99ea-4f6b-8e74-4e86e7d060d9"
+        }
+      ],
+      "name": "Bake (Manifest)",
+      "namespace": "chnlsales-api",
+      "outputName": "templating",
+      "overrides": {},
+      "refId": "2",
+      "requisiteStageRefIds": [],
+      "templateRenderer": "HELM3",
+      "type": "bakeManifest"
+    },
+    {
+      "account": "notify-communication-private-yul-np-001",
+      "cloudProvider": "kubernetes",
+      "manifestArtifactAccount": "embedded-artifact",
+      "manifestArtifactId": "5b5b8d08-962b-4f63-9936-5da830a8dc16",
+      "moniker": {
+        "app": "sample-starter"
+      },
+      "name": "Deploy (Manifest)",
+      "refId": "1",
+      "requiredArtifactIds": [
+        "3253ede7-3492-493e-a8e4-1e6e27bddc42"
+      ],
+      "requiredArtifacts": [],
+      "requisiteStageRefIds": [
+        "2"
+      ],
+      "skipExpressionEvaluation": false,
+      "source": "artifact",
+      "trafficManagement": {
+        "enabled": false,
+        "options": {
+          "enableTraffic": false,
+          "services": []
+        }
+      },
+      "type": "deployManifest"
+    }
+  ],
+  "triggers": [
+    {
+      "account": "gcr",
+      "enabled": true,
+      "expectedArtifactIds": [
+        "3253ede7-3492-493e-a8e4-1e6e27bddc42"
+      ],
+      "organization": "cio-gke-devops-e4993356/chnlsales-api",
+      "registry": "gcr.io",
+      "repository": "cio-gke-devops-e4993356/chnlsales-api/sample-starter",
+      "runAsUser": "tf-infra-channel-sales-admin-sa",
+      "tag": "^[^.]+$",
+      "type": "docker"
+    }
+  ],
+  "updateTs": "1609955859324"
+}
